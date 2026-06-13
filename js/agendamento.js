@@ -1,48 +1,72 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+import { db } from "./firebase.js";
 
-<head>
+import {
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+window.enviarContato = async function () {
 
-<title>Nexsite Beauty</title>
+  const nome = document
+    .getElementById("nome")
+    .value
+    .trim();
 
-<link rel="stylesheet" href="css/style.css">
+  const telefone = document
+    .getElementById("telefone")
+    .value
+    .trim();
 
-</head>
+  const mensagem = document
+    .getElementById("mensagem");
 
-<body>
 
-<div class="login-box">
+  if (!nome || !telefone) {
 
-<h1>NEXSITE BEAUTY</h1>
+    mensagem.innerHTML =
+      "Preencha todos os campos.";
 
-<h2>Solicite mais informações</h2>
+    return;
 
-<input
-id="nome"
-type="text"
-placeholder="Seu nome">
+  }
 
-<input
-id="telefone"
-type="text"
-placeholder="WhatsApp">
 
-<button onclick="enviarContato()">
+  try {
 
-QUERO MAIS INFORMAÇÕES
+    await addDoc(
+      collection(db, "clientes"),
+      {
 
-</button>
+        nome: nome,
 
-<p id="mensagem"></p>
+        telefone: telefone,
 
-</div>
+        dataCadastro:
+          new Date().toLocaleDateString(
+            "pt-BR"
+          )
 
-<script type="module" src="js/agendamento.js"></script>
+      }
+    );
 
-</body>
 
-</html>
+    mensagem.innerHTML =
+      "Obrigado! Em breve entraremos em contato.";
+
+
+    document.getElementById("nome").value = "";
+
+    document.getElementById("telefone").value = "";
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    mensagem.innerHTML =
+      "Erro ao enviar. Tente novamente.";
+
+  }
+
+};
