@@ -83,13 +83,9 @@ async function carregarProjetos() {
   tbody.innerHTML = "";
 
   let faturamento = 0;
-
   let andamento = 0;
-
   let entregues = 0;
-
   let prazo = 0;
-
 
   snapshot.forEach((item) => {
 
@@ -97,22 +93,18 @@ async function carregarProjetos() {
 
     faturamento += projeto.valor || 0;
 
-
     if (projeto.status === "Em andamento") {
 
       andamento++;
-
       prazo++;
 
     }
-
 
     if (projeto.status === "Entregue") {
 
       entregues++;
 
     }
-
 
     tbody.innerHTML += `
 
@@ -129,6 +121,8 @@ async function carregarProjetos() {
         <td>${projeto.prazoEntrega}</td>
 
         <td>${projeto.status}</td>
+
+        <td>${projeto.observacoes || "-"}</td>
 
         <td>
 
@@ -172,21 +166,17 @@ async function carregarProjetos() {
 
   });
 
-
   document.getElementById("faturamentoTotal")
     .textContent =
     `R$ ${faturamento.toFixed(2)}`;
-
 
   document.getElementById("projetosAndamento")
     .textContent =
     andamento;
 
-
   document.getElementById("projetosEntregues")
     .textContent =
     entregues;
-
 
   document.getElementById("projetosPrazo")
     .textContent =
@@ -225,7 +215,6 @@ async function(id) {
 
   if (!novoStatus) return;
 
-
   await updateDoc(
 
     doc(db, "projetos", id),
@@ -252,7 +241,6 @@ async function(id) {
 
   if (!confirmar) return;
 
-
   await updateDoc(
 
     doc(db, "projetos", id),
@@ -278,7 +266,6 @@ async function(id) {
     );
 
   if (!confirmar) return;
-
 
   await deleteDoc(
 
