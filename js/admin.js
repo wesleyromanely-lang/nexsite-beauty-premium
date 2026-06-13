@@ -14,7 +14,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-// Salvar projeto
+// Salvar Projeto
 document
   .getElementById("btnSalvar")
   .addEventListener("click", salvarProjeto);
@@ -71,7 +71,7 @@ async function salvarProjeto() {
 }
 
 
-// Dashboard e lista
+// Dashboard e Lista
 async function carregarProjetos() {
 
   const snapshot =
@@ -83,9 +83,13 @@ async function carregarProjetos() {
   tbody.innerHTML = "";
 
   let faturamento = 0;
+
   let andamento = 0;
+
   let entregues = 0;
+
   let prazo = 0;
+
 
   snapshot.forEach((item) => {
 
@@ -93,14 +97,22 @@ async function carregarProjetos() {
 
     faturamento += projeto.valor || 0;
 
+
     if (projeto.status === "Em andamento") {
+
       andamento++;
+
       prazo++;
+
     }
 
+
     if (projeto.status === "Entregue") {
+
       entregues++;
+
     }
+
 
     tbody.innerHTML += `
 
@@ -124,23 +136,31 @@ async function carregarProjetos() {
             class="btn-acao"
             onclick="entregarProjeto('${item.id}')">
 
-            Entregue
+            ✅ Entregue
 
           </button>
 
           <button
-            class="btn-acao"
+            class="btn-editar"
             onclick="editarProjeto('${item.id}')">
 
-            Editar
+            ✏️ Editar
 
           </button>
 
           <button
-            class="btn-acao"
+            class="btn-cancelar"
+            onclick="cancelarProjeto('${item.id}')">
+
+            ❌ Cancelar
+
+          </button>
+
+          <button
+            class="btn-excluir"
             onclick="excluirProjeto('${item.id}')">
 
-            Excluir
+            🗑️ Excluir
 
           </button>
 
@@ -152,78 +172,123 @@ async function carregarProjetos() {
 
   });
 
+
   document.getElementById("faturamentoTotal")
-    .textContent = `R$ ${faturamento.toFixed(2)}`;
+    .textContent =
+    `R$ ${faturamento.toFixed(2)}`;
+
 
   document.getElementById("projetosAndamento")
-    .textContent = andamento;
+    .textContent =
+    andamento;
+
 
   document.getElementById("projetosEntregues")
-    .textContent = entregues;
+    .textContent =
+    entregues;
+
 
   document.getElementById("projetosPrazo")
-    .textContent = prazo;
+    .textContent =
+    prazo;
 
 }
 
 
-// Marcar entregue
+// Entregue
 window.entregarProjeto =
-  async function (id) {
+async function(id) {
 
-    await updateDoc(
-      doc(db, "projetos", id),
-      {
-        status: "Entregue"
-      }
-    );
+  await updateDoc(
 
-    carregarProjetos();
+    doc(db, "projetos", id),
 
-  };
+    {
+      status: "Entregue"
+    }
+
+  );
+
+  carregarProjetos();
+
+};
 
 
-// Editar projeto
+// Editar Status
 window.editarProjeto =
-  async function (id) {
+async function(id) {
 
-    const novoStatus =
-      prompt(
-        "Digite o novo status:\n\nEm andamento\nEntregue\nAguardando informações"
-      );
-
-    if (!novoStatus) return;
-
-    await updateDoc(
-      doc(db, "projetos", id),
-      {
-        status: novoStatus
-      }
+  const novoStatus =
+    prompt(
+      "Digite o novo status:\n\nEm andamento\nEntregue\nCancelado\nAguardando informações"
     );
 
-    carregarProjetos();
-
-  };
+  if (!novoStatus) return;
 
 
-// Excluir projeto
+  await updateDoc(
+
+    doc(db, "projetos", id),
+
+    {
+      status: novoStatus
+    }
+
+  );
+
+  carregarProjetos();
+
+};
+
+
+// Cancelar
+window.cancelarProjeto =
+async function(id) {
+
+  const confirmar =
+    confirm(
+      "Deseja realmente cancelar este projeto?"
+    );
+
+  if (!confirmar) return;
+
+
+  await updateDoc(
+
+    doc(db, "projetos", id),
+
+    {
+      status: "Cancelado"
+    }
+
+  );
+
+  carregarProjetos();
+
+};
+
+
+// Excluir
 window.excluirProjeto =
-  async function (id) {
+async function(id) {
 
-    const confirmar =
-      confirm(
-        "Deseja realmente excluir este projeto?"
-      );
-
-    if (!confirmar) return;
-
-    await deleteDoc(
-      doc(db, "projetos", id)
+  const confirmar =
+    confirm(
+      "Deseja realmente excluir este projeto?"
     );
 
-    carregarProjetos();
+  if (!confirmar) return;
 
-  };
+
+  await deleteDoc(
+
+    doc(db, "projetos", id)
+
+  );
+
+  carregarProjetos();
+
+};
 
 
 // Logout
