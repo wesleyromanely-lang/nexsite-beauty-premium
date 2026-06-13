@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Nexsite Beauty - Painel</title>
@@ -15,9 +17,17 @@
 
 <header>
 
+<div>
+
 <h1>NEXSITE BEAUTY</h1>
 
 <p>Painel Administrativo</p>
+
+</div>
+
+<button id="btnSair">
+Sair
+</button>
 
 </header>
 
@@ -25,23 +35,71 @@
 <main>
 
 <div class="card">
+
 <h2>Serviços</h2>
+
 <p id="totalServicos">0</p>
+
 </div>
 
 
 <div class="card">
+
 <h2>Clientes</h2>
+
 <p id="totalClientes">0</p>
+
 </div>
 
 
 <div class="card">
+
 <h2>Agendamentos</h2>
+
 <p id="totalAgendamentos">0</p>
+
 </div>
 
 </main>
+
+
+<section class="agendamentos">
+
+<h2>Agendamentos</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Cliente</th>
+
+<th>Telefone</th>
+
+<th>Serviço</th>
+
+<th>Data</th>
+
+<th>Horário</th>
+
+<th>Status</th>
+
+<th>Ações</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="listaAgendamentos">
+
+</tbody>
+
+</table>
+
+</section>
 
 
 <script type="module" src="js/admin.js"></script>
