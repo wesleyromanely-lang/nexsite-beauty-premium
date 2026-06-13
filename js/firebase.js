@@ -1,14 +1,13 @@
-// Firebase Nexsite Beauty
+// Nexsite Beauty Firebase
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import {
-  getFirestore
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  getAuth
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 const firebaseConfig = {
@@ -30,23 +29,14 @@ appId: "1:481492521726:web:081d9290b12820dab54baf"
 };
 
 
-// Inicializar
-
 const app = initializeApp(firebaseConfig);
 
-
-// Banco de dados
-
 const db = getFirestore(app);
-
-
-// Login
 
 const auth = getAuth(app);
 
 
 export {
-app,
 db,
 auth
 };
