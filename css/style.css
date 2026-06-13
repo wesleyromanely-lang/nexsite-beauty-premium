@@ -49,6 +49,81 @@ main{
   color:#111827;
 }
 
+/* Cadastro */
+
+.cadastro{
+  background:white;
+  margin:20px;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.cadastro h2{
+  margin-bottom:25px;
+  color:#111827;
+}
+
+.campo{
+  margin-bottom:20px;
+}
+
+.campo label{
+  display:block;
+  margin-bottom:8px;
+  font-weight:600;
+  color:#374151;
+}
+
+.campo label i{
+  margin-right:8px;
+  color:#111827;
+}
+
+.campo input,
+.campo textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  font-size:1rem;
+}
+
+.campo textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.campo input:focus,
+.campo textarea:focus{
+  outline:none;
+  border-color:#111827;
+}
+
+/* Botão Salvar */
+
+#btnSalvar{
+  background:#111827;
+  color:white;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:10px;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+}
+
+#btnSalvar:hover{
+  opacity:.9;
+}
+
+#btnSalvar i{
+  margin-right:8px;
+}
+
+/* Projetos */
+
 .agendamentos{
   padding:20px;
 }
@@ -82,6 +157,8 @@ tr:hover{
   background:#f9fafb;
 }
 
+/* Botões */
+
 button{
   border:none;
   border-radius:10px;
@@ -102,18 +179,35 @@ button{
 .btn-acao{
   background:#16a34a;
   color:white;
-  margin-right:5px;
+  margin:3px;
+}
+
+.btn-editar{
+  background:#f59e0b;
+  color:white;
+  margin:3px;
 }
 
 .btn-cancelar{
   background:#dc2626;
   color:white;
+  margin:3px;
+}
+
+.btn-excluir{
+  background:#374151;
+  color:white;
+  margin:3px;
 }
 
 .btn-acao:hover,
-.btn-cancelar:hover{
+.btn-editar:hover,
+.btn-cancelar:hover,
+.btn-excluir:hover{
   opacity:.9;
 }
+
+/* Login */
 
 .login-box{
   max-width:450px;
@@ -155,6 +249,8 @@ button{
   font-weight:600;
 }
 
+/* Responsivo */
+
 @media(max-width:768px){
 
   header{
@@ -166,6 +262,15 @@ button{
   table{
     display:block;
     overflow-x:auto;
+  }
+
+  .btn-acao,
+  .btn-editar,
+  .btn-cancelar,
+  .btn-excluir{
+    display:block;
+    width:100%;
+    margin:5px 0;
   }
 
 }
