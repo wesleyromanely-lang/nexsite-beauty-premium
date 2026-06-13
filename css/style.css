@@ -151,10 +151,21 @@ td{
   padding:12px;
   border-bottom:1px solid #eee;
   text-align:center;
+  vertical-align:middle;
 }
 
 tr:hover{
   background:#f9fafb;
+}
+
+/* Observações */
+
+td:nth-child(7){
+  max-width:250px;
+  text-align:left;
+  white-space:normal;
+  word-break:break-word;
+  font-size:0.95rem;
 }
 
 /* Botões */
