@@ -5,7 +5,8 @@ import {
   addDoc,
   getDocs,
   doc,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -15,11 +16,8 @@ import {
 
 // Salvar projeto
 document
-.getElementById("btnSalvar")
-.addEventListener(
-  "click",
-  salvarProjeto
-);
+  .getElementById("btnSalvar")
+  .addEventListener("click", salvarProjeto);
 
 
 async function salvarProjeto() {
@@ -31,237 +29,217 @@ async function salvarProjeto() {
     document.getElementById("telefone").value.trim();
 
   const valor =
-    Number(
-      document.getElementById("valor").value
-    );
+    Number(document.getElementById("valor").value);
 
   const observacoes =
     document.getElementById("observacoes").value.trim();
 
-
   if (!cliente || !telefone) {
 
-    alert(
-      "Preencha nome e telefone."
-    );
+    alert("Preencha nome e telefone.");
 
     return;
 
   }
 
-
   const hoje = new Date();
 
   const entrega = new Date();
 
-  entrega.setDate(
-    entrega.getDate() + 2
-  );
-
+  entrega.setDate(entrega.getDate() + 2);
 
   await addDoc(
     collection(db, "projetos"),
     {
-
       cliente,
-
       telefone,
-
       valor,
-
-      dataVenda:
-        hoje.toLocaleDateString("pt-BR"),
-
-      prazoEntrega:
-        entrega.toLocaleDateString("pt-BR"),
-
+      dataVenda: hoje.toLocaleDateString("pt-BR"),
+      prazoEntrega: entrega.toLocaleDateString("pt-BR"),
       status: "Em andamento",
-
       observacoes
-
     }
   );
 
-
   document.getElementById("cliente").value = "";
-
   document.getElementById("telefone").value = "";
-
   document.getElementById("valor").value = "180";
-
   document.getElementById("observacoes").value = "";
-
 
   carregarProjetos();
 
 }
-;
 
 
 // Dashboard e lista
 async function carregarProjetos() {
 
   const snapshot =
-    await getDocs(
-      collection(db, "projetos")
-    );
-
+    await getDocs(collection(db, "projetos"));
 
   const tbody =
-    document.getElementById(
-      "listaProjetos"
-    );
+    document.getElementById("listaProjetos");
 
   tbody.innerHTML = "";
 
-
   let faturamento = 0;
-
   let andamento = 0;
-
   let entregues = 0;
-
   let prazo = 0;
-
 
   snapshot.forEach((item) => {
 
     const projeto = item.data();
 
+    faturamento += projeto.valor || 0;
 
-    faturamento +=
-      projeto.valor || 0;
-
-
-    if (
-      projeto.status ===
-      "Em andamento"
-    ) {
-
+    if (projeto.status === "Em andamento") {
       andamento++;
-
       prazo++;
-
     }
 
-
-    if (
-      projeto.status ===
-      "Entregue"
-    ) {
-
+    if (projeto.status === "Entregue") {
       entregues++;
-
     }
-
 
     tbody.innerHTML += `
 
-    <tr>
+      <tr>
 
-      <td>${projeto.cliente}</td>
+        <td>${projeto.cliente}</td>
 
-      <td>${projeto.telefone}</td>
+        <td>${projeto.telefone}</td>
 
-      <td>
-        R$ ${projeto.valor}
-      </td>
+        <td>R$ ${projeto.valor}</td>
 
-      <td>
-        ${projeto.dataVenda}
-      </td>
+        <td>${projeto.dataVenda}</td>
 
-      <td>
-        ${projeto.prazoEntrega}
-      </td>
+        <td>${projeto.prazoEntrega}</td>
 
-      <td>
-        ${projeto.status}
-      </td>
+        <td>${projeto.status}</td>
 
-      <td>
+        <td>
 
-        <button
-          class="btn-acao"
-          onclick="entregarProjeto('${item.id}')">
+          <button
+            class="btn-acao"
+            onclick="entregarProjeto('${item.id}')">
 
-          Entregue
+            Entregue
 
-        </button>
+          </button>
 
-      </td>
+          <button
+            class="btn-acao"
+            onclick="editarProjeto('${item.id}')">
 
-    </tr>
+            Editar
+
+          </button>
+
+          <button
+            class="btn-acao"
+            onclick="excluirProjeto('${item.id}')">
+
+            Excluir
+
+          </button>
+
+        </td>
+
+      </tr>
 
     `;
 
   });
 
+  document.getElementById("faturamentoTotal")
+    .textContent = `R$ ${faturamento.toFixed(2)}`;
 
-  document.getElementById(
-    "faturamentoTotal"
-  ).textContent =
+  document.getElementById("projetosAndamento")
+    .textContent = andamento;
 
-    `R$ ${faturamento.toFixed(2)}`;
+  document.getElementById("projetosEntregues")
+    .textContent = entregues;
 
-
-  document.getElementById(
-    "projetosAndamento"
-  ).textContent = andamento;
-
-
-  document.getElementById(
-    "projetosEntregues"
-  ).textContent = entregues;
-
-
-  document.getElementById(
-    "projetosPrazo"
-  ).textContent = prazo;
+  document.getElementById("projetosPrazo")
+    .textContent = prazo;
 
 }
 
 
 // Marcar entregue
 window.entregarProjeto =
-async function(id) {
+  async function (id) {
 
-  await updateDoc(
+    await updateDoc(
+      doc(db, "projetos", id),
+      {
+        status: "Entregue"
+      }
+    );
 
-    doc(
-      db,
-      "projetos",
-      id
-    ),
+    carregarProjetos();
 
-    {
-
-      status: "Entregue"
-
-    }
-
-  );
+  };
 
 
-  carregarProjetos();
+// Editar projeto
+window.editarProjeto =
+  async function (id) {
 
-};
+    const novoStatus =
+      prompt(
+        "Digite o novo status:\n\nEm andamento\nEntregue\nAguardando informações"
+      );
+
+    if (!novoStatus) return;
+
+    await updateDoc(
+      doc(db, "projetos", id),
+      {
+        status: novoStatus
+      }
+    );
+
+    carregarProjetos();
+
+  };
+
+
+// Excluir projeto
+window.excluirProjeto =
+  async function (id) {
+
+    const confirmar =
+      confirm(
+        "Deseja realmente excluir este projeto?"
+      );
+
+    if (!confirmar) return;
+
+    await deleteDoc(
+      doc(db, "projetos", id)
+    );
+
+    carregarProjetos();
+
+  };
 
 
 // Logout
 document
-.getElementById("btnSair")
-.addEventListener(
-  "click",
-  async () => {
+  .getElementById("btnSair")
+  .addEventListener(
+    "click",
+    async () => {
 
-    await signOut(auth);
+      await signOut(auth);
 
-    window.location.href =
-      "login.html";
+      window.location.href =
+        "login.html";
 
-  }
-);
+    }
+  );
 
 
 carregarProjetos();
