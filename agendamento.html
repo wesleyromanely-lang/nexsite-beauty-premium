@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Agendamento Online</title>
+<title>Nexsite Beauty</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -16,7 +19,7 @@
 
 <h1>NEXSITE BEAUTY</h1>
 
-<h2>Agende seu horário</h2>
+<h2>Solicite mais informações</h2>
 
 <input
 id="nome"
@@ -28,40 +31,10 @@ id="telefone"
 type="text"
 placeholder="WhatsApp">
 
-<select id="servico">
-<option value="">Selecione um serviço</option>
-</select>
+<button onclick="enviarContato()">
 
-<input
-id="data"
-type="date">
+QUERO MAIS INFORMAÇÕES
 
-<select id="horario">
-
-<option value="">
-Selecione um horário
-</option>
-
-<option>09:00</option>
-<option>09:30</option>
-<option>10:00</option>
-<option>10:30</option>
-<option>11:00</option>
-<option>11:30</option>
-<option>13:00</option>
-<option>13:30</option>
-<option>14:00</option>
-<option>14:30</option>
-<option>15:00</option>
-<option>15:30</option>
-<option>16:00</option>
-<option>16:30</option>
-<option>17:00</option>
-
-</select>
-
-<button onclick="agendar()">
-Agendar
 </button>
 
 <p id="mensagem"></p>
@@ -71,4 +44,5 @@ Agendar
 <script type="module" src="js/agendamento.js"></script>
 
 </body>
+
 </html>
