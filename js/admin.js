@@ -2,9 +2,7 @@ import { db, auth } from "./firebase.js";
 
 import {
   collection,
-  getDocs,
-  doc,
-  updateDoc
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -13,54 +11,11 @@ import {
 
 
 // Dashboard
-async function carregarDados() {
-
-  try {
-
-    const servicosSnapshot = await getDocs(
-      collection(db, "servicos")
-    );
-
-    document.getElementById(
-      "totalServicos"
-    ).textContent = servicosSnapshot.size;
-
-
-    const clientesSnapshot = await getDocs(
-      collection(db, "clientes")
-    );
-
-    document.getElementById(
-      "totalClientes"
-    ).textContent = clientesSnapshot.size;
-
-
-    const agendamentosSnapshot = await getDocs(
-      collection(db, "agendamentos")
-    );
-
-    document.getElementById(
-      "totalAgendamentos"
-    ).textContent = agendamentosSnapshot.size;
-
-  } catch (error) {
-
-    console.error(
-      "Erro ao carregar dashboard:",
-      error
-    );
-
-  }
-
-}
-
-
-// Lista de agendamentos
-async function carregarAgendamentos() {
+async function carregarClientes() {
 
   const tbody =
     document.getElementById(
-      "listaAgendamentos"
+      "listaClientes"
     );
 
   tbody.innerHTML = "";
@@ -68,46 +23,46 @@ async function carregarAgendamentos() {
   try {
 
     const snapshot = await getDocs(
-      collection(db, "agendamentos")
+      collection(db, "clientes")
     );
+
+
+    document.getElementById(
+      "totalClientes"
+    ).textContent = snapshot.size;
+
 
     snapshot.forEach((item) => {
 
-      const agenda = item.data();
+      const cliente = item.data();
+
+      const telefone =
+        cliente.telefone.replace(
+          /\D/g,
+          ""
+        );
 
       tbody.innerHTML += `
 
       <tr>
 
-        <td>${agenda.cliente}</td>
+        <td>${cliente.nome}</td>
 
-        <td>${agenda.telefone}</td>
-
-        <td>${agenda.servico}</td>
-
-        <td>${agenda.data}</td>
-
-        <td>${agenda.horario}</td>
-
-        <td>${agenda.status}</td>
+        <td>${cliente.telefone}</td>
 
         <td>
 
-          <button
-            class="btn-acao"
-            onclick="marcarAtendido('${item.id}')">
+          <a
+            href="https://wa.me/55${telefone}"
+            target="_blank">
 
-            Atendido
+            <button class="btn-acao">
 
-          </button>
+              WhatsApp
 
-          <button
-            class="btn-cancelar"
-            onclick="cancelarAgenda('${item.id}')">
+            </button>
 
-            Cancelar
-
-          </button>
+          </a>
 
         </td>
 
@@ -119,60 +74,11 @@ async function carregarAgendamentos() {
 
   } catch (error) {
 
-    console.error(
-      "Erro ao carregar agendamentos:",
-      error
-    );
+    console.error(error);
 
   }
 
 }
-
-
-// Marcar como atendido
-window.marcarAtendido = async function(id) {
-
-  try {
-
-    await updateDoc(
-      doc(db, "agendamentos", id),
-      {
-        status: "atendido"
-      }
-    );
-
-    carregarAgendamentos();
-
-  } catch (error) {
-
-    console.error(error);
-
-  }
-
-};
-
-
-// Cancelar
-window.cancelarAgenda = async function(id) {
-
-  try {
-
-    await updateDoc(
-      doc(db, "agendamentos", id),
-      {
-        status: "cancelado"
-      }
-    );
-
-    carregarAgendamentos();
-
-  } catch (error) {
-
-    console.error(error);
-
-  }
-
-};
 
 
 // Logout
@@ -191,5 +97,4 @@ document
 );
 
 
-carregarDados();
-carregarAgendamentos();
+carregarClientes();
