@@ -138,7 +138,18 @@ async function carregarProjetos() {
             class="btn-editar"
             onclick="editarProjeto('${item.id}')">
 
-            ✏️ Editar
+            ✏️ Status
+
+          </button>
+
+          <button
+            class="btn-editar"
+            onclick="editarObservacao(
+              '${item.id}',
+              \`${(projeto.observacoes || "").replace(/`/g, "\\`")}\`
+            )">
+
+            📝 Observação
 
           </button>
 
@@ -166,20 +177,24 @@ async function carregarProjetos() {
 
   });
 
-  document.getElementById("faturamentoTotal")
-    .textContent =
+  document.getElementById(
+    "faturamentoTotal"
+  ).textContent =
     `R$ ${faturamento.toFixed(2)}`;
 
-  document.getElementById("projetosAndamento")
-    .textContent =
+  document.getElementById(
+    "projetosAndamento"
+  ).textContent =
     andamento;
 
-  document.getElementById("projetosEntregues")
-    .textContent =
+  document.getElementById(
+    "projetosEntregues"
+  ).textContent =
     entregues;
 
-  document.getElementById("projetosPrazo")
-    .textContent =
+  document.getElementById(
+    "projetosPrazo"
+  ).textContent =
     prazo;
 
 }
@@ -210,7 +225,9 @@ async function(id) {
 
   const novoStatus =
     prompt(
+
       "Digite o novo status:\n\nEm andamento\nEntregue\nCancelado\nAguardando informações"
+
     );
 
   if (!novoStatus) return;
@@ -230,13 +247,45 @@ async function(id) {
 };
 
 
+// Editar Observação
+window.editarObservacao =
+async function(id, observacaoAtual) {
+
+  const novaObservacao =
+    prompt(
+
+      "Atualize a observação:\n\n(Deixe vazio para remover)",
+
+      observacaoAtual
+
+    );
+
+  if (novaObservacao === null) return;
+
+  await updateDoc(
+
+    doc(db, "projetos", id),
+
+    {
+      observacoes: novaObservacao.trim()
+    }
+
+  );
+
+  carregarProjetos();
+
+};
+
+
 // Cancelar
 window.cancelarProjeto =
 async function(id) {
 
   const confirmar =
     confirm(
+
       "Deseja realmente cancelar este projeto?"
+
     );
 
   if (!confirmar) return;
@@ -262,7 +311,9 @@ async function(id) {
 
   const confirmar =
     confirm(
+
       "Deseja realmente excluir este projeto?"
+
     );
 
   if (!confirmar) return;
@@ -282,7 +333,9 @@ async function(id) {
 document
   .getElementById("btnSair")
   .addEventListener(
+
     "click",
+
     async () => {
 
       await signOut(auth);
@@ -291,6 +344,7 @@ document
         "login.html";
 
     }
+
   );
 
 
