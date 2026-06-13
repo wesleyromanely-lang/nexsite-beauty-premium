@@ -1,1 +1,9 @@
-
+{
+  cliente: "Toda Bella Studio",
+  telefone: "11999999999",
+  valor: 180,
+  dataVenda: "13/06/2026",
+  prazoEntrega: "15/06/2026",
+  status: "Em andamento",
+  observacoes: "Aguardando envio da logo"
+}
