@@ -1,124 +1,48 @@
-import { db } from "./firebase.js";
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-import {
-  collection,
-  getDocs,
-  addDoc,
-  query,
-  where
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<head>
 
+<meta charset="UTF-8">
 
-// Carregar serviços
-async function carregarServicos() {
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const select = document.getElementById("servico");
+<title>Nexsite Beauty</title>
 
-  const snapshot = await getDocs(
-    collection(db, "servicos")
-  );
+<link rel="stylesheet" href="css/style.css">
 
-  snapshot.forEach((doc) => {
+</head>
 
-    const servico = doc.data();
+<body>
 
-    const option = document.createElement("option");
+<div class="login-box">
 
-    option.value = servico.nome;
-    option.textContent =
-      `${servico.nome} - R$ ${servico.valor}`;
+<h1>NEXSITE BEAUTY</h1>
 
-    select.appendChild(option);
+<h2>Solicite mais informações</h2>
 
-  });
+<input
+id="nome"
+type="text"
+placeholder="Seu nome">
 
-}
+<input
+id="telefone"
+type="text"
+placeholder="WhatsApp">
 
-carregarServicos();
+<button onclick="enviarContato()">
 
+QUERO MAIS INFORMAÇÕES
 
-// Agendar
-window.agendar = async function () {
+</button>
 
-  const nome =
-    document.getElementById("nome").value;
+<p id="mensagem"></p>
 
-  const telefone =
-    document.getElementById("telefone").value;
+</div>
 
-  const servico =
-    document.getElementById("servico").value;
+<script type="module" src="js/agendamento.js"></script>
 
-  const data =
-    document.getElementById("data").value;
+</body>
 
-  const horario =
-    document.getElementById("horario").value;
-
-  const mensagem =
-    document.getElementById("mensagem");
-
-
-  if (
-    !nome ||
-    !telefone ||
-    !servico ||
-    !data ||
-    !horario
-  ) {
-
-    mensagem.innerHTML =
-      "Preencha todos os campos.";
-
-    return;
-
-  }
-
-
-  // Verificar horário ocupado
-  const consulta = query(
-    collection(db, "agendamentos"),
-    where("data", "==", data),
-    where("horario", "==", horario)
-  );
-
-  const resultado = await getDocs(consulta);
-
-
-  if (!resultado.empty) {
-
-    mensagem.innerHTML =
-      "Este horário já está ocupado.";
-
-    return;
-
-  }
-
-
-  // Salvar agendamento
-  await addDoc(
-    collection(db, "agendamentos"),
-    {
-
-      cliente: nome,
-      telefone: telefone,
-      servico: servico,
-      data: data,
-      horario: horario,
-      status: "confirmado"
-
-    }
-  );
-
-
-  mensagem.innerHTML =
-    "Agendamento realizado com sucesso!";
-
-
-  document.getElementById("nome").value = "";
-  document.getElementById("telefone").value = "";
-  document.getElementById("servico").value = "";
-  document.getElementById("data").value = "";
-  document.getElementById("horario").value = "";
-
-};
+</html>
